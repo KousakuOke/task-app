@@ -31,9 +31,21 @@ public class TaskService {
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
 
-    public List<TaskResponse> getAllTasks(Long userId){
-        return taskRepository.findByUserId(userId)
-            .stream().map(TaskResponse::from).toList();
+    public List<TaskResponse> getAllTasks(Long userId, String sort){
+      List<Task> tasks;
+      switch (sort) {
+        case "deadline":
+            tasks = taskRepository.findByUserIdOrderByDeadlineAsc(userId);
+            break;
+        case "tagName":
+            tasks = taskRepository.findByUserIdOrderByTagName(userId);
+            break;
+        case "createdAt":
+        default:
+            tasks = taskRepository.findByUserIdOrderByCreatedAtDesc(userId);
+            break;
+      }
+      return tasks.stream().map(TaskResponse::from).toList();
     }
 
     public List<TaskResponse> getTodayTasks(Long userId){

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.taskapp.dto.request.TaskRequest;
@@ -41,8 +42,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponse>> getAllTasks() {
-        return ResponseEntity.ok(taskService.getAllTasks(this.getCurrentUserId()));
+    public ResponseEntity<List<TaskResponse>> getAllTasks(@RequestParam(defaultValue = "createdAt") String sort) {
+        return ResponseEntity.ok(taskService.getAllTasks(getCurrentUserId(), sort));
     }
     
     @GetMapping("/today")

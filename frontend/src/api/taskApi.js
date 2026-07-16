@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-export const getTasks = () => axiosInstance.get('/api/tasks');
+export const getTasks = (sort = 'createdAt') => axiosInstance.get(`/api/tasks?sort=${sort}`)
 export const getTodayTasks = () => axiosInstance.get('/api/tasks/today');
 export const getUpcomingTasks = () => axiosInstance.get('/api/tasks/upcoming');
 

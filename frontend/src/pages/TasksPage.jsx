@@ -9,16 +9,18 @@ import ProjectCard from "../components/project/ProjectCard";
 import ProjectDetail from "../components/project/ProjectDetail";
 import ProjectForm from "../components/project/ProjectForm";
 
-const TaskPage = () => {
+const TasksPage = () => {
     const {tasks, setTasks, projects, setProjects, selectedTask, selectedProject, setTasksAndSync, setProjectsAndSync} = useTaskStore();
     const [showTaskForm, setShowTaskForm] = useState(false);
     const [showProjectForm, setShowProjectForm] = useState(false);
     const [tab, setTab] = useState('tasks');
+    const [sortKey, setSortKey] = useState('createdAt');
+    const [projectSortKey, setProjectSortKey] = useState('createdAt');
 
-    const fetchAll = async () => {
+    const fetchAll = async (sort = sortKey) => {
         try{
             const [taskRes, projectRes] = await Promise.all([
-                getTasks(),
+                getTasks(sort),
                 getProjects(),
             ])
             setTasksAndSync(taskRes.data);
@@ -26,6 +28,28 @@ const TaskPage = () => {
         }catch(err){
             console.error(err);
         }
+    }
+
+    const handleSortChange = (e) => {
+        const newSort = e.target.value;
+        setSortKey(newSort);
+        fetchAll(newSort);
+    }
+
+    const sortProjects = (items) => {
+        return [...items].sort((a, b) => {
+            switch (projectSortKey){
+                case 'deadline':
+                    if(!a.deadline) return 1;
+                    if(!b.deadline) return -1;
+                    return new Date(a.deadline) - new Date(b.deadline);
+                case 'progress':
+                    return b.progress - a.progress;
+                case 'createdAt':
+                default:
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+            }
+        })
     }
 
     useEffect(() => {
@@ -52,6 +76,28 @@ const TaskPage = () => {
                     </button>
                 </div>
 
+                {tab === 'tasks' && (
+                    <select value={sortKey} onChange={handleSortChange}
+                        className="w-full border rounded-lg px-3 py-1.5 text-sm 
+                            focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="createdAt">作成日順</option>
+                        <option value="deadline">期日順</option>
+                        <option value="tagName">タグ順</option>
+                    </select>
+                )}
+
+                {tab === 'projects' && (
+                    <select value={projectSortKey} onChange={(e) => setProjectSortKey(e.target.value)}
+                        className="w-full border rounded-lg px-3 py-1.5 text-sm 
+                            focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="createdAt">作成日順</option>
+                        <option value="deadline">期日順</option>
+                        <option value="progress">進行度順</option>
+                    </select>
+                )}
+
                 <button onClick={() => tab === 'tasks' ? setShowTaskForm(true) : setShowProjectForm(true)}
                     className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                 >
@@ -62,7 +108,7 @@ const TaskPage = () => {
                     {tab === 'tasks' ? tasks.map((task) => (
                     <TaskCard key={task.id} task={task} onUpdate={fetchAll} /> 
                     ))
-                    : projects.map((project) => (
+                    : sortProjects(projects).map((project) => (
                         <ProjectCard key={project.id} project={project} />
                     ))
                 }
@@ -93,4 +139,4 @@ const TaskPage = () => {
     )
 }
 
-export default TaskPage;
+export default TasksPage;
