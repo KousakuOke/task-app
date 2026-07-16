@@ -1,0 +1,7 @@
+# ローカル環境用
+spring.datasource.url=jdbc:mysql://localhost:3307/taskapp
+spring.datasource.username=root
+spring.datasource.password=ここにMySQLのパスワードを入れてください
+
+# JWT
+jwt.secret=ここに32文字以上のランダムな文字列を入れてください
