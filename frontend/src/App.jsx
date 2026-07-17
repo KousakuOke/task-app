@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import PrivateRoute from "./router/PrivateRoute";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import PrivateRoute from './router/PrivateRoute';
 import Layout from './components/layout/Layout';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import TaskPage from './pages/TasksPage';
 import CalendarPage from './pages/CalendarPage';
-import AccountPage from "./pages/AccountPage";
+import AccountPage from './pages/AccountPage';
+import TagPage from './pages/TagPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="tasks" element={<TaskPage />} />
           <Route path="calendar" element={<CalendarPage />} />
+          <Route path="tags" element={<TagPage />} />
           <Route path="account" element={<AccountPage />} />
         </Route>
       </Routes>

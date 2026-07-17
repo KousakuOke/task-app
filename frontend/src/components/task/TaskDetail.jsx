@@ -46,6 +46,7 @@ const TaskDetail = ({onUpdate}) => {
             <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-800">{selectedTask.name}</h2>
                 <TagBadge tagName={selectedTask.tagName} 
+                    tagColor={selectedTask.tagColor}
                     taskId={selectedTask.id}
                     task={selectedTask}
                     onUpdate={onUpdate}

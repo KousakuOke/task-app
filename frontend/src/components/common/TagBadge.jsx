@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, captureOwnerStack } from "react";
 import { getTags } from "../../api/tagApi";
 import { updateTask } from "../../api/taskApi";
 import useTaskStore from "../../store/taskStore";
 
-const TagBadge = ({tagName, taskId, task, onUpdate}) => {
+const TagBadge = ({tagName, tagColor, taskId, task, onUpdate}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [tags, setTags] = useState([]);
     const ref = useRef(null);
@@ -24,12 +24,15 @@ const TagBadge = ({tagName, taskId, task, onUpdate}) => {
         }
     }, [isOpen])
 
-    const getColor = (name) => {
-        switch (name) {
-            case '未着手': return 'bg-gray-200 text-gray-700';
-            case '作業中': return 'bg-blue-100 text-blue-700';
-            case '完了': return 'bg-green-100 text-green-700';
-            default: return 'bg-purple-100 text-purple-700';
+    const getStyle = (color) => {
+        if(!color) return {
+            backgroundColor: '#f3f4f6',
+            color: '#6b7280'
+        }
+        return {
+            backgroundColor: color + '33',
+            color: color,
+            border: `1px solid ${color}44`,
         }
     }
 
@@ -52,7 +55,9 @@ const TagBadge = ({tagName, taskId, task, onUpdate}) => {
     if(!taskId){
         if(!tagName) return null
         return (
-            <span className={`text-xs px-2 py-1 rounded-full ${getColor(tagName)}`}>
+            <span className="text-xs px-2 py-1 rounded-full"
+                style={getStyle(tagColor)}
+            >
                 {tagName}
             </span>
         )
@@ -61,14 +66,17 @@ const TagBadge = ({tagName, taskId, task, onUpdate}) => {
     return(
         <div className="relative" ref={ref}>
             <span onClick={() => setIsOpen(!isOpen)}
-                className={`text-xs px-2 py-1 rounded-full cursor-pointer 
-                    ${getColor(tagName)} ${tagName ? '' : 'bg-gray-100 text-gray-400'}`}
+                className="text-xs px-2 py-1 rounded-full cursor-pointer"
+                style={tagName ? getStyle(tagColor) : {
+                    backgroundColor: '#f3f4f6',
+                    color: '#9ca3af'
+                }}
             >
                 {tagName || 'タグなし'}
             </span>
 
             {isOpen && (
-                <div className="absolute right-0 mt-1 bg-white border rounded-lg shadow-lg z-10 min-w-32">
+                <div className="absolute right-0 mt-1 bg-white border rounded-lg shadow-lg z-10 min-w-40">
                     <div onClick={() => handleTagChange({ id: null})} 
                         className="px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 cursor-pointer"
                     >
@@ -76,9 +84,14 @@ const TagBadge = ({tagName, taskId, task, onUpdate}) => {
                     </div>
                     {tags.map((tag) => (
                         <div key={tag.id} onClick={() => handleTagChange(tag)} 
-                            className={`px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 ${getColor(tag.name)}`}
+                            className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 flex items-center gap-2"
                         >
-                            {tag.name}
+                            <span  className="w-3 h-3 rounded-full flex-shrink-0"
+                                style={{backgroundColor: tag.color || '#8b5cf6'}}
+                            />
+                            <span style={{color: tag.color || '#8b5cf6'}}>
+                                {tag.name}
+                            </span>
                         </div>
                     ))}
                 </div>

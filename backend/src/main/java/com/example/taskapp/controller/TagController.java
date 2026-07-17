@@ -2,6 +2,7 @@ package com.example.taskapp.controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.taskapp.dto.request.TagRequest;
 import com.example.taskapp.dto.response.TagResponse;
+import com.example.taskapp.dto.response.TaskResponse;
 import com.example.taskapp.service.TagService;
 
 import jakarta.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -48,6 +51,11 @@ public class TagController {
         //TODO: process POST request
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(tagService.createTag(getCurrentUserId(), req));
+    }
+
+    @PutMapping("/{tagId}")
+    public ResponseEntity<TagResponse> updateTag(@PathVariable Long tagId, @Valid @RequestBody TagRequest req){
+        return ResponseEntity.ok(tagService.updateTag(getCurrentUserId(), tagId, req));
     }
 
     @DeleteMapping("/{tagId}")

@@ -16,6 +16,7 @@ public class TaskResponse {
     private String memo;
     private Long tagId;
     private String tagName;
+    private String tagColor;
     private Long projectId;
     private String projectName;
     private LocalDateTime createdAt;
@@ -28,6 +29,7 @@ public class TaskResponse {
         res.memo = task.getMemo();
         res.tagId = task.getTag() != null ? task.getTag().getId() : null;
         res.tagName = task.getTag() != null ? task.getTag().getName() : null;
+        res.tagColor = task.getTag() != null ? task.getTag().getColor() : null;
         res.projectId = task.getProject() != null ? task.getProject().getId() : null;
         res.projectName = task.getProject() != null ? task.getProject().getName() : null;
         res.createdAt = task.getCreatedAt();

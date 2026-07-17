@@ -16,6 +16,7 @@ const TaskCard = ({task, onUpdate}) => {
             <div className="flex items-center justify-between">
                 <span className="font-medium text-gray-800">{task.name}</span>
                 <TagBadge tagName={task.tagName} 
+                    tagColor={task.tagColor}
                     taskId={task.id}
                     task={task}
                     onUpdate={onUpdate}

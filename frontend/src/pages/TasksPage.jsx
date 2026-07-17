@@ -57,54 +57,58 @@ const TasksPage = () => {
     },[])
 
     return (
-        <div className="flex gap-6 h-full">
-            <div className="w-80 flex-shrink-0 space-y-4">
-                <div className="flex bg-gray-200 rounded-lg p-1">
-                    <button onClick={() => setTab('tasks')}
-                        className={`flex-1 py-1 rounded-md text-sm
-                            font-medium transition-colors ${tab === 'tasks'
-                            ? 'bg-white text-gray-800' : 'text-gray-500'}`}
+        <div className="flex gap-6 h-full overflow-hidden">
+
+            <div className="w-80 flex-shrink-0 flex flex-col h-full">
+
+                <div className="flex-shrink-0 pb-4">
+                    <div className="flex bg-gray-200 rounded-lg p-1 mb-3">
+                        <button onClick={() => setTab('tasks')}
+                            className={`flex-1 py-1 rounded-md text-sm
+                                font-medium transition-colors ${tab === 'tasks'
+                                ? 'bg-white text-gray-800' : 'text-gray-500'}`}
+                        >
+                            タスク
+                        </button>
+                        <button onClick={() => setTab('projects')}
+                            className={`flex-1 py-1 rounded-md text-sm font-medium 
+                                transition-colors ${tab === 'projects' ? 'bg-white text-gray-800'
+                                : 'text-gray-500'}`}
+                        >
+                            プロジェクト
+                        </button>
+                    </div>
+
+                    {tab === 'tasks' && (
+                        <select value={sortKey} onChange={handleSortChange}
+                            className="w-full border rounded-lg px-3 py-2 text-sm mb-3 
+                                focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="createdAt">作成日順</option>
+                            <option value="deadline">期日順</option>
+                            <option value="tagName">タグ順</option>
+                        </select>
+                    )}
+
+                    {tab === 'projects' && (
+                        <select value={projectSortKey} onChange={(e) => setProjectSortKey(e.target.value)}
+                            className="w-full border rounded-lg px-3 py-2 text-sm mb-3 
+                                focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="createdAt">作成日順</option>
+                            <option value="deadline">期日順</option>
+                            <option value="progress">進行度順</option>
+                        </select>
+                    )}
+
+                    <button onClick={() => tab === 'tasks' ? setShowTaskForm(true) : setShowProjectForm(true)}
+                        className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                     >
-                        タスク
-                    </button>
-                    <button onClick={() => setTab('projects')}
-                        className={`flex-1 py-1 rounded-md text-sm font-medium 
-                            transition-colors ${tab === 'projects' ? 'bg-white text-gray-800'
-                            : 'text-gray-500'}`}
-                    >
-                        プロジェクト
+                        + {tab === 'tasks' ? 'タスクを追加' : 'プロジェクトを追加'}
                     </button>
                 </div>
 
-                {tab === 'tasks' && (
-                    <select value={sortKey} onChange={handleSortChange}
-                        className="w-full border rounded-lg px-3 py-1.5 text-sm 
-                            focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="createdAt">作成日順</option>
-                        <option value="deadline">期日順</option>
-                        <option value="tagName">タグ順</option>
-                    </select>
-                )}
-
-                {tab === 'projects' && (
-                    <select value={projectSortKey} onChange={(e) => setProjectSortKey(e.target.value)}
-                        className="w-full border rounded-lg px-3 py-1.5 text-sm 
-                            focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="createdAt">作成日順</option>
-                        <option value="deadline">期日順</option>
-                        <option value="progress">進行度順</option>
-                    </select>
-                )}
-
-                <button onClick={() => tab === 'tasks' ? setShowTaskForm(true) : setShowProjectForm(true)}
-                    className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                    + {tab === 'tasks' ? 'タスクを追加' : 'プロジェクトを追加'}
-                </button>
-
-                <div className="space-y-2">
+                <div className="flex-1 overflow-y-auto space-y-2 pr-2">
                     {tab === 'tasks' ? tasks.map((task) => (
                     <TaskCard key={task.id} task={task} onUpdate={fetchAll} /> 
                     ))
@@ -115,7 +119,7 @@ const TasksPage = () => {
                 </div>
             </div>
 
-            <div className="flex-1">
+            <div className="flex-1 overflow-y-auto">
                 {showTaskForm && (
                     <TaskForm 
                         onClose={() => setShowTaskForm(false)}

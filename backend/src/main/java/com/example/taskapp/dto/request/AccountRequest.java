@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 public class AccountRequest {
 
+    @Size(max = 50, message = "ユーザー名は50文字以内で入力してください")
+    private String username;
+
     @Email(message = "メールアドレスの形式が正しくありません")
     private String email;
 

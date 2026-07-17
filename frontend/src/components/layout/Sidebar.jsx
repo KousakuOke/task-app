@@ -15,6 +15,7 @@ const Sidebar = () => {
         { to: '/', label: 'ホーム'},
         { to: '/tasks', label: 'タスク・プロジェクト'},
         { to: '/calendar', label: 'カレンダー'},
+        { to: '/tags', label: 'タグ管理'},
         { to: '/account', label: 'アカウント'},
     ]
 

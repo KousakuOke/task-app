@@ -23,6 +23,9 @@ public class Tag {
     @Column(nullable = false, length = 50)
     private String name;
 
+    @Column(length = 7)
+    private String color;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

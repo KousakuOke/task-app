@@ -22,6 +22,10 @@ public class AccountService {
     public void updateAccount(Long userId, AccountRequest req){
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("ユーザーが見つかりません"));
+
+        if (req.getUsername() != null && !req.getUsername().isEmpty()) {
+            user.setUsername(req.getUsername());
+        }
         
         if (req.getEmail() != null && !req.getEmail().isEmpty()) {
             userRepository.findByEmail(req.getEmail()).ifPresent(existingUser -> {

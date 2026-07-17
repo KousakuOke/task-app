@@ -1,6 +1,8 @@
 package com.example.taskapp.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,10 +40,15 @@ public class AuthService {
 
         User saved = userRepository.save(user);
 
-        List<String> defaultTags = List.of("未着手", "作業中","完了");
-        defaultTags.forEach(tagName -> {
+        Map<String, String> defaultTags = new HashMap<>();
+        defaultTags.put("未着手", "#9ca3af");
+        defaultTags.put("作業中", "#3b82f6");
+        defaultTags.put("完了", "#22c55e");
+
+        defaultTags.forEach((tagName, color) -> {
             Tag tag = new Tag();
             tag.setName(tagName);
+            tag.setColor(color);
             tag.setUser(saved);
             tagRepository.save(tag);
         });
