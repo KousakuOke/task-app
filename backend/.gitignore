@@ -36,7 +36,7 @@ build/
 
 # ローカル・本番用
 src/main/resources/application-local.properties
-src/main/resources/application-prod.properties
+#src/main/resources/application-prod.properties
 
 # テスト用
 src/test/resources/application.properties
