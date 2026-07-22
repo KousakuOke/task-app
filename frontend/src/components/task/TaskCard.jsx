@@ -5,7 +5,7 @@ const TaskCard = ({task, onUpdate}) => {
     const setSelectedTask = useTaskStore((state) => state.setSelectedTask);
     const selectedTask = useTaskStore((state) => state.selectedTask);
 
-    const isSelected = selectedTask?.taskId === task.id;
+    const isSelected = Number(selectedTask?.id) === Number(task.id)
 
     return (
         <div onClick={() => setSelectedTask(task)}

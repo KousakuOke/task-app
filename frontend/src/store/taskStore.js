@@ -13,16 +13,20 @@ const useTaskStore = create((set) => ({
 
     updateSelectedTask: (updatedTask) => set({selectedTask: updatedTask}),
 
-    setTasksAndSync: (tasks) => set((state) => ({
+    setTasksAndSync: (tasks) => set((state) => {
+    const found = state.selectedTask
+        ? tasks.find((t) => Number(t.id) === Number(state.selectedTask.id)) : null;
+    console.log('setTasksAndSync called', 'selectedTask:', state.selectedTask?.id, 'found:', found?.id)
+    return {
         tasks,
-        selectedTask: state.selectedTask 
-            ? tasks.find((t) => t.id === state.selectedTask.id) || null : null,
-    })),
+        selectedTask: found || null,
+    }
+}),
 
     setProjectsAndSync: (projects) => set((state) => ({
         projects,
         selectedProject: state.selectedProject 
-            ? projects.find((p) => p.id === state.selectedProject.id) || null : null,
+            ? projects.find((p) => Number(p.id) === Number(state.selectedProject.id)) || null : null,
     })),
 }))
 
